@@ -90,7 +90,7 @@ export const eventsDb = {
         email: "janedoe@gmail.com",
       },
       sentInvites: {
-        eventId: 1_1,
+        // eventId: 1_1,
         invitedLIst: [
           {
             id: 5,

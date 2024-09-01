@@ -8,6 +8,7 @@ import PrimaryButton from "../buttons/primary-button";
 import { currentUser } from "~/app/data";
 import RegisteredUsersTable from "~/app/(dashboard)/dashboard/events/registered-users-table";
 import { IoMdAddCircle } from "react-icons/io";
+import InviteForm from "~/app/(dashboard)/dashboard/events/invite-form";
 
 interface DetailsCardProps {
   imageUrl: string;
@@ -44,7 +45,7 @@ interface DetailsCardProps {
       email: string;
     };
     sentInvites: {
-      eventId: number;
+      // eventId: number;
       invitedLIst: {
         id: number;
         name: string;
@@ -61,6 +62,11 @@ interface DetailsCardProps {
   // data?: {};
 }
 
+type FormData = {
+  name: string;
+  email: string;
+};
+
 // export default function PrimaryCard() {
 const SecondaryCard: React.FC<DetailsCardProps> = ({
   imageUrl,
@@ -75,10 +81,11 @@ const SecondaryCard: React.FC<DetailsCardProps> = ({
   const handleOpenModal = () => setModalVisible(true);
   const handleCloseModal = () => setModalVisible(false);
 
-  const [currentView, setCurrentView] = useState("eventDetails"); // eventDetailsView || registeredUsersView || invitesView
-  // const [showRegisteredUsers, setShowRegisteredUsers] = useState(false);
-  // const [showInvites, setShowInvites] = useState(false);
+  const [currentView, setCurrentView] = useState("eventDetails"); //
 
+  const [createInvite, setCreateInvite] = useState(false);
+  const [newInvitesList, setNewInvitesList] = useState<FormData[]>([]);
+  console.log("here is the newInvites: ", newInvitesList);
   return (
     <div>
       <div className="group relative w-full rounded-[10px] bg-white p-[5%] hover:bg-grayPlain">
@@ -119,12 +126,12 @@ const SecondaryCard: React.FC<DetailsCardProps> = ({
         )}
 
         <PrimaryModal isVisible={isModalVisible} onClose={handleCloseModal}>
-          <div className="flex w-full flex-col bg-purple-400">
+          <div className="flex w-full flex-col">
             {currentView === "registeredUsersView" ? (
               <div className="relative flex-1 bg-orange-300 pt-4">
                 <button
                   onClick={() => setCurrentView("eventDetails")}
-                  className="absolute -top-5 left-0 rounded-lg bg-pry px-3 py-2 text-xs text-white sm:text-sm md:text-base"
+                  className="absolute -top-6 left-0 rounded-lg bg-pry px-3 py-2 text-xs text-white sm:text-sm md:text-base"
                 >
                   {"< back"}
                 </button>
@@ -141,46 +148,90 @@ const SecondaryCard: React.FC<DetailsCardProps> = ({
                       }
                     />
                   </div>
-                  {/* <ul>
-                    {myEventData?.registered.map((person, count) => (
-                      <li key={person?.id} className="grid grid-cols-2">
-                        <div className="flex items-center gap-1">
-                          <p>{count + 1}. </p>
-                          <p>{person?.name}</p>
-                        </div>
-                        <p>{person?.email}</p>
-                      </li>
-                    ))}
-                  </ul> */}
                 </div>
               </div>
             ) : currentView === "invitesView" ? (
-              <div className="">
-                <div>
+              <div className="flex-1 bg-orange-300 pt-4">
+                <div className="relative">
                   <button
-                    onClick={() => setCurrentView("eventDetails")}
-                    className="rounded-lg bg-pry px-3 py-2 text-xs text-white sm:text-sm md:text-base"
+                    onClick={() => {
+                      createInvite
+                        ? setCreateInvite(false)
+                        : setCurrentView("eventDetails");
+                    }}
+                    className="absolute -top-10 left-0 rounded-lg bg-pry px-3 py-2 text-xs text-white sm:text-sm md:text-base"
                   >
                     {"< back"}
                   </button>
                 </div>
-                <div>
-                  <h4>Here is the list of invites sent for the event</h4>
-                  <ul>
-                    {myEventData?.registered.map((person) => (
-                      <li key={person?.id}>{person?.name}</li>
-                    ))}
-                  </ul>
-                </div>
-                <button
-                  onClick={handleOpenModal}
-                  className="group absolute bottom-[5%] right-[5%] z-10 flex items-center gap-1 rounded-full bg-white ease-in hover:bg-pry hover:px-2 hover:py-1 active:bg-blue-600"
-                >
-                  <IoMdAddCircle className="h-[40px] w-[40px] text-pry ease-in group-hover:text-white sm:h-[48px] sm:w-[48px] md:h-[52px] md:w-[52px] lg:h-[64px] lg:w-[64px]" />
-                  <p className="hidden text-xs font-semibold text-white duration-1000 ease-in group-hover:block sm:text-sm md:text-[18px] lg:text-base">
-                    New invite
-                  </p>
-                </button>
+
+                {/* condition for adding new invites will sleep here */}
+                {createInvite ? (
+                  <div>
+                    <h4 className="mb-8 text-center text-xl font-semibold md:text-2xl">
+                      Create invite
+                    </h4>
+                    <div>
+                      <InviteForm
+                        list={newInvitesList}
+                        setList={setNewInvitesList}
+                      />
+
+                      {newInvitesList.length ? (
+                        <ul className="mt-8">
+                          {newInvitesList.map((item, count) => (
+                            <li
+                              key={count}
+                              className="flex items-center justify-between"
+                            >
+                              <p>{item?.email}</p>
+                              <button
+                                onClick={() => {}}
+                                className="text-xl font-bold text-red-500"
+                              >
+                                x
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div>Nothing added yet</div>
+                      )}
+                      <div className="mx-auto max-w-[200px]">
+                        <PrimaryButton label="Submit" className="mt-10" />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col">
+                    <h4 className="mb-8 text-center text-xl font-semibold md:text-2xl">
+                      Here is the list of people that have registered for the
+                      event
+                    </h4>
+                    <div>
+                      <RegisteredUsersTable
+                        inviteType
+                        data={
+                          myEventData?.sentInvites?.invitedLIst
+                            ? myEventData?.sentInvites?.invitedLIst
+                            : []
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {!createInvite && (
+                  <button
+                    onClick={() => setCreateInvite(true)}
+                    className="group absolute bottom-[5%] right-[5%] z-10 flex items-center gap-1 rounded-full bg-white ease-in hover:bg-pry hover:px-2 hover:py-1 active:bg-blue-600"
+                  >
+                    <IoMdAddCircle className="h-[40px] w-[40px] text-pry ease-in group-hover:text-white sm:h-[48px] sm:w-[48px] md:h-[52px] md:w-[52px] lg:h-[64px] lg:w-[64px]" />
+                    <p className="hidden text-xs font-semibold text-white duration-1000 ease-in group-hover:block sm:text-sm md:text-[18px] lg:text-base">
+                      New invite
+                    </p>
+                  </button>
+                )}
               </div>
             ) : (
               <div className="mx-auto flex w-[90%] flex-col items-center justify-center overflow-y-auto pb-10">
