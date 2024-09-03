@@ -20,8 +20,8 @@ const PrimaryCard: React.FC<DetailsCardProps> = ({
 }) => {
   const [reminderOn, setReminderOn] = useState(false);
   return (
-    <div className="max-ww-[350px] group relative w-full rounded-[10px] bg-white p-[5%] hover:bg-grayPlain">
-      <Link href={"/event/owanbe"} className="w-full">
+    <div className="group relative flex h-[420px] w-full flex-col rounded-[10px] bg-white p-[5%] hover:bg-grayPlain">
+      <Link href={"/event/owanbe"} className="flex w-full flex-col">
         <div
           className="relative flex h-[240px] w-[100%] flex-col items-center rounded-[5px] bg-cover bg-center"
           style={{
@@ -32,15 +32,17 @@ const PrimaryCard: React.FC<DetailsCardProps> = ({
             Free
           </p>
         </div>
-        <div className="mt-3 text-black">
+        <div className="mt-3 flex flex-col text-black">
           <h5 className="text-xs group-hover:font-semibold md:text-sm lg:text-base">
             BestSelller Book Bootcamp -write, Market & Publish Your Book
             -Lucknow
           </h5>
-          <p className="my-4 text-sm text-pry">Saturdat, March 18, 9.30PM</p>
-          <p className="text-[10px] text-grayText md:text-[12px] lg:text-[14px]">
-            ONLINE EVENT - Attend anywhere
-          </p>
+          <div className="mt-3 flex flex-1 flex-col justify-end gap-3">
+            <p className="text-sm text-pry">Saturdat, March 18, 9.30PM</p>
+            <p className="text-[10px] text-grayText md:text-[12px] lg:text-[14px]">
+              ONLINE EVENT - Attend anywhere
+            </p>
+          </div>
         </div>
       </Link>
 

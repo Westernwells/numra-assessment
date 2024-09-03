@@ -26,7 +26,7 @@ export default function MakeYourEvent() {
       </div>
 
       <PrimaryModal isVisible={isModalVisible} onClose={handleCloseModal}>
-        <div className="mx-auto flex w-[90%] flex-col items-center justify-center bg-orange-400">
+        <div className="bg-oran-400 mx-auto flex w-[90%] flex-col items-center justify-center">
           <FormEvent />
         </div>
       </PrimaryModal>
